@@ -48,3 +48,10 @@
   (define-variable! (definition-variable exp)
 		    (eval (definition-value exp) env))
   'ok)
+
+(define (list-of-values-ltr exps env)
+  (if (no-operands? exps)
+    '()
+    (let (first-val (eval (first-operand exps) env))
+      (cons first-val
+	    (list-of-values (rest-operands exps) env)))))
