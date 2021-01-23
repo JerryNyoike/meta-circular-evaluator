@@ -84,3 +84,8 @@
 	(make-if (cond-predicate first)
 		 (seq->exp (cond-actions first))
 		 (expand-clauses rest))))))
+
+;; louis functions
+(define (l-application? exp) (tagged-list? exp 'call))
+(define (l-operator exp) (cadr exp))
+(define (l-operands exp) (cddr exp))
