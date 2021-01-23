@@ -68,21 +68,17 @@
 	   (lambda (exp env)
 	     (eval (cond->if exp) env))
 	   eval-table)
-  (insert! 'application
-	   (lambda (exp env)
-	     (apply (eval (operator exp env))
-		    (list-of-values (operands exp) env)))
-	   eval-table)
   'done)
 
 (install-eval-definitions)
 
 (define (eval exp env)
-  (cond ((self-evaluating? exp) exp)
-	((variable? exp) (lookup-variable-value exp env))
-	((quoted? exp) (text-of-quotation exp))
-	(else 
-	  (let ((fun (lookup (operator exp) eval-table)))
-	    (if fun
-		(fun exp env)
-		(else "Unknown operation type EVAL: exp"))))
+  (let ((fun (lookup (operator exp) eval-table)))
+    (cond ((self-evaluating? exp) exp)
+	  ((variable? exp) (lookup-variable-value exp env))
+	  ((quoted? exp) (text-of-quotation exp))
+	  (fun (fun exp env))
+	  ((application? exp)
+	   (apply (eval (operator exp env)
+			(list-of-values (operands exp) env))))
+	  (else "Unknown operation type EVAL: exp"))))
