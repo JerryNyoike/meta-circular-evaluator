@@ -48,7 +48,7 @@
 
 (define (begin? exp) (tagged-list? exp 'begin))
 (define (begin-actions exp) (cdr exp))
-(define (last-exp? seq) (null? (cdr exp)))
+(define (last-exp? seq) (null? (cdr seq)))
 (define (first-exp seq) (car seq))
 (define (rest-exp seq) (cdr seq))
 (define (seq->exp seq)
@@ -89,3 +89,11 @@
 (define (l-application? exp) (tagged-list? exp 'call))
 (define (l-operator exp) (cadr exp))
 (define (l-operands exp) (cddr exp))
+
+;; and
+(define (and? exp) (tagged-list exp 'and))
+(define (and-expressions exp) (cdr exp))
+
+;; or
+(define (or? exp) (tagged-list exp 'or))
+(define (or-expressions exp) (cdr exp))
