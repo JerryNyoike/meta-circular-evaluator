@@ -21,6 +21,20 @@
       (eval (if-consequent exp) env)
       (eval (if-alternative exp) env)))
 
+  (define (eval-and exps env)
+    (cond ((null? exps) #t)
+	  ((not (true? (eval (car exps) env)))
+	   #f)
+	  (else
+	    (eval-and (cdr exps) env))))
+
+  (define (eval-or exps env)
+    (cond ((null? exps) #f)
+	  ((true? (eval (car exps) env))
+	   #t)
+	  (else
+	    (eval-or (cdr exps) env))))
+
   (define (eval-sequence exps env)
     (cond ((last-exp? exps)
 	   (eval (first-exp exps) env))
@@ -68,12 +82,18 @@
 	   (lambda (exp env)
 	     (eval (cond->if exp) env))
 	   eval-table)
+  (insert 'and (lambda (exp env)
+		(eval-and (and-expressions exp) env))
+	  eval-table)
+  (insert 'or (lambda (exp env)
+		(eval-or (or-expressions exp) env))
+	  eval-table)
   'done)
 
 (install-eval-definitions)
 
 (define (eval exp env)
-  (let ((fun (lookup (operator exp) eval-table)))
+  (let ((fun (lookup (expression-type exp) eval-table)))
     (cond ((self-evaluating? exp) exp)
 	  ((variable? exp) (lookup-variable-value exp env))
 	  ((quoted? exp) (text-of-quotation exp))
