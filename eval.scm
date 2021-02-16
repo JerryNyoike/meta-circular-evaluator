@@ -91,6 +91,7 @@
   (insert 'or (lambda (exp env)
 		(eval-or (or-expressions exp) env))
 	  eval-table)
+  (insert 'let eval-let eval-table)
   'done)
 
 (install-eval-definitions)
