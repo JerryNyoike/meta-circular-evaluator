@@ -67,6 +67,9 @@
 	(let (left (eval (first-operand exps) env))
 	  (cons left right)))))
 
+  (define (eval-let exp env)
+    (eval (let->combination exp) env))
+
   (insert! 'set! eval-assignment eval-table)
   (insert! 'define eval-definition eval-table)
   (insert! 'if eval-if eval-table)
