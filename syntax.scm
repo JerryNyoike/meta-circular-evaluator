@@ -118,3 +118,17 @@
 		   (expand-or-expressions (cdr exps))
 		   'true))))
 
+;; let expressions
+(define (let? exp) (tagged-list? exp 'let))
+(define (let-bindings exp) (cadr exp))
+(define (let-binding-names bindings)
+  (map car bindings))
+(define (let-binding-exps bindings)
+  (map cdr bindings))
+(define (let-body exp) (cddr exp))
+(define (let->combination exp)
+  (let ((bindings (let-bindings exp)))
+    (append
+      (make-lambda (let-binding-names bindings) ;params
+		   (let-body exp))
+    (let-binding-exps bindings))))
