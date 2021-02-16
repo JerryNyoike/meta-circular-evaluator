@@ -82,7 +82,10 @@
 	  (seq->exp (cond-actions first))
 	  (error "ELSE clause isn't last: COND->IF" clauses))
 	(make-if (cond-predicate first)
-		 (seq->exp (cond-actions first))
+		 (let ((actions (cond-actions first)))
+		   (if (eq? (car actions) '=>)
+		     (list ((cadr actions) (cond-predicate first)))
+		     (seq->exp (cond-actions first))))
 		 (expand-clauses rest))))))
 
 ;; louis functions
