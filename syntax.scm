@@ -132,3 +132,23 @@
       (make-lambda (let-binding-names bindings) ;params
 		   (let-body exp))
     (let-binding-exps bindings))))
+(define (make-let bindings body)
+  (cons 'let (list bindings) body))
+(define (last-binding? binding)
+  (null? (cdr binding)))
+
+;; let*
+(define (let*? exp) (tagged-list? 'let* exp))
+(define (let*->nested-lets exp)
+  (define (let*->lets bindings body)
+    (cond ((last-binding? bindings)
+	   (make-let (car bindings)
+		     body))
+	  (else
+	    (make-let (car bindings)
+		      (let*->lets (cdr bindings)
+				  body)))))
+  (let ((bindings (let-bindings exp))
+	(body (let-body exp)))
+    (let*->lets bindings body)))
+
