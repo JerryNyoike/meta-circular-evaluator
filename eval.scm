@@ -92,6 +92,8 @@
 		(eval-or (or-expressions exp) env))
 	  eval-table)
   (insert 'let eval-let eval-table)
+  (insert 'let* (lambda (exp env)
+		  (eval (let*->nested-lets exp) env)))
   'done)
 
 (install-eval-definitions)
