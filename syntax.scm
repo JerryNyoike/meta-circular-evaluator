@@ -92,8 +92,26 @@
 
 ;; and
 (define (and? exp) (tagged-list exp 'and))
-(define (and-expressions exp) (cdr exp))
+(define (expressions exp) (cdr exp))
+(define (last-expression? exp) (null? (cdr exp)))
+(define (and->if exps) (expand-and-expressions (expressions exp)))
+(define (expand-and-expressions exps)
+  (cond ((null? exps) 'true)
+	((last-expression? exps) (car exps))
+	(else
+	  (make-if (car exps)
+		   (expand-and-expressions (cdr exps))
+		   'false))))
 
 ;; or
 (define (or? exp) (tagged-list exp 'or))
-(define (or-expressions exp) (cdr exp))
+(define (or->if exp) (expand-or-expressions (expressions exp)))
+(define (expand-or-expressions exps)
+  (cond ((null? exps)
+	 'false)
+	((last-expression? exps) (car exps))
+	(else
+	  (make-if (car exps)
+		   (expand-or-expressions (cdr exps))
+		   'true))))
+
