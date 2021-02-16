@@ -127,11 +127,18 @@
   (map cdr bindings))
 (define (let-body exp) (cddr exp))
 (define (let->combination exp)
-  (let ((bindings (let-bindings exp)))
-    (append
-      (make-lambda (let-binding-names bindings) ;params
-		   (let-body exp))
-    (let-binding-exps bindings))))
+  (cond ((named-let? exp)
+	 (let ((bindings (named-let-bindings exp)))
+	   (append
+	     (make-lambda (let-binding-names bindings)
+			  (named-let-body exp))
+	     (let-binding-exps bindings))))
+	(else
+	  (let ((bindings (let-bindings exp)))
+	    (append
+	      (make-lambda (let-binding-names bindings) ;params
+			   (let-body exp))		;body
+	      (let-binding-exps bindings))))))
 (define (make-let bindings body)
   (cons 'let (list bindings) body))
 (define (last-binding? binding)
@@ -152,3 +159,7 @@
 	(body (let-body exp)))
     (let*->lets bindings body)))
 
+;; named let
+(define (named-let? exp) (and (let? exp) (not (pair? (cadr exp)))))
+(define (named-let-bindings exp) (caddr exp))
+(define (named-let-body exp) (cadddr exp))
