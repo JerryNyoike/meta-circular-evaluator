@@ -213,6 +213,9 @@
   (set-car! vals new-val))
 (define (same-environment? test-env env)
   (eq? test-env env))
+(define (delete-binding! vars vals)
+  (update-value! vals '())
+  (update-var! vars '()))
 
 (define (lookup-variable-value var env)
   (define (env-loop env)
@@ -227,7 +230,7 @@
 	(scan (frame-variables frame) (frame-values frame)))))
   (env-loop env))
 
-(define (define-variable!! var val env)
+(define (define-variable! var val env)
   (let ((frame (first-frame env)))
     (define (scan vars vals)
       (cond ((null? vars)
@@ -248,3 +251,12 @@
       (let ((frame (first-frame env)))
 	(scan (frame-variables frame) (frame-values frame)))))
   (env-loop env))
+
+(define (remove-binding! var env)
+  (let ((frame (first-frame env)))
+    (define (scan vars vals)
+      (cond ((null? vars)
+	     (error "Variable not bound in this frame: UNBOUND" var))
+	    ((is-variable? var (first-var vars)) (delete-binding! vals val))
+	    (else (scan (rest-vars vars) (rest-vals vals)))))
+    (scan (frame-variables frame) (frame-values frame))))
