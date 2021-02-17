@@ -105,6 +105,17 @@
 
 (install-eval-definitions)
 
+(define (setup-environment)
+  (let ((initial-env
+	  (extend-environment (primitive-procedure-names)
+			      (primitive-procedure-objects)
+			      the-empty-environment)))
+    (define-variable! 'true true initial-env)
+    (define-variable! 'false false initial-env)
+  initial-env))
+
+(define the-global-environment (setup-environment))
+
 (define (eval exp env)
   (let ((fun (lookup (expression-type exp) eval-table)))
     (cond ((self-evaluating? exp) exp)
