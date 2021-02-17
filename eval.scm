@@ -53,6 +53,12 @@
 		      (eval (definition-value exp) env))
     'ok)
 
+  (define (eval-unbinding exp env)
+    (remove-binding! (definition-variable exp)
+		     env)
+    'ok)
+
+
   (define (list-of-values-ltr exps env)
     (if (no-operands? exps)
       '()
@@ -94,6 +100,7 @@
   (insert 'let eval-let eval-table)
   (insert 'let* (lambda (exp env)
 		  (eval (let*->nested-lets exp) env)))
+  (insert 'make-unbound! eval-unbinding env)
   'done)
 
 (install-eval-definitions)
