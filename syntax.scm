@@ -1,5 +1,21 @@
 (declare (usual-integrations))
 
+;; language primitives
+(define (primitive-procedure? proc)
+  (tagged-list? proc 'primitive))
+(define (primitive-implementation proc) (cadr proc))
+(define primitive-procedures
+  (list (list 'car car)
+	(list 'cdr cdr)
+	(list 'cons cons)
+	(list 'null? null?)))
+(define (primitive-procedure-names)
+  (map car primitive-procedures))
+(define (primitive-procedure-objects)
+  (map (lambda (proc) (list 'primitive (cadr proc)))
+       primitive-procedures))
+
+
 (define (self-evaluating? exp)
   (cond ((number? exp) true)
 	((string? exp) true)
@@ -17,7 +33,7 @@
 
 (define (assignment? exp) (tagged-list? exp 'set!))
 (define (assignment-variable exp) (cadr exp))
-(define (assignment-value) exp) (caddr exp))
+(define (assignment-value exp) (caddr exp))
 
 (define (definition? exp) (tagged-list? exp 'define))
 (define (definition-variable exp)
@@ -145,7 +161,7 @@
   (null? (cdr binding)))
 
 ;; let*
-(define (let*? exp) (tagged-list? 'let* exp))
+(define (let*? exp) (tagged-list? exp 'let*))
 (define (let*->nested-lets exp)
   (define (let*->lets bindings body)
     (cond ((last-binding? bindings)
