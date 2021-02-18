@@ -1,7 +1,7 @@
 (declare (usual-integrations))
 
 (define make-table
-  (let ((table (list '*eval* '())))
+  (let ((table (list '*eval*)))
     (define (lookup key)
       (let ((record (assoc key (cdr table))))
 	(if record
