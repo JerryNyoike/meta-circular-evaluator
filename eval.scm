@@ -65,7 +65,7 @@
       '()
       (let ((first-val (eval (first-operand exps) env)))
 	(cons first-val
-	      (list-of-values (rest-operands exps) env)))))
+	      (list-of-values-ltr (rest-operands exps) env)))))
 
   (define (list-of-values-rtl exps env)
     (if (no-operands? exps env)
