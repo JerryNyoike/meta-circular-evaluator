@@ -50,7 +50,8 @@
 
   (define (eval-definition exp env)
     (define-variable! (definition-variable exp)
-		      (eval (definition-value exp) env))
+		      (eval (definition-value exp) env)
+		      env)
     'ok)
 
   (define (eval-unbinding exp env)
