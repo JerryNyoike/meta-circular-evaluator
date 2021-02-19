@@ -31,6 +31,13 @@
       (let ((left (eval (first-operand exps) env)))
 	(cons left right)))))
 
+(define (eval-sequence exps env)
+  (cond ((last-exp? exps)
+	 (eval (first-exp exps) env))
+	(else
+	  (eval (first-exp exps) env)
+	  (eval (rest-exps exps) env))))
+
 (define (install-eval-definitions)
   (define (eval-if exp env)
     (if (true? (eval (if-predicate exp) env))
@@ -51,12 +58,6 @@
 	  (else
 	    (eval-or (cdr exps) env))))
 
-  (define (eval-sequence exps env)
-    (cond ((last-exp? exps)
-	   (eval (first-exp exps) env))
-	  (else
-	    (eval (first-exp exps) env)
-	    (eval (rest-exps exps) env))))
 
   (define (eval-assignment exp env)
     (set-variable-value! (assignment-variable exp)
@@ -74,9 +75,6 @@
     (remove-binding! (definition-variable exp)
 		     env)
     'ok)
-
-
-
 
   (define (eval-let exp env)
     (eval (let->combination exp) env))
