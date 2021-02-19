@@ -9,7 +9,7 @@
 
 (define (apply procedure arguments)
   (cond ((primitive-procedure? procedure)
-	 (apply-primitive-procedure procdeure arguments))
+	 (apply-primitive-procedure procedure arguments))
 	((compound-procedure? procedure)
 	 (eval-sequence
 	   (procedure-body procedure)
