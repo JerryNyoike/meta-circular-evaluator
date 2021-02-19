@@ -7,7 +7,9 @@
 (define eval-table make-table)
 
 (define (expression-type exp)
-  (car exp))
+  (if (pair? exp)
+    (car exp)
+    exp))
 
 (define (list-of-values exps env)
   (if (no-operands? exps)
@@ -118,8 +120,6 @@
     (define-variable! 'false false initial-env)
   initial-env))
 
-(define the-global-environment (setup-environment))
-
 (define (eval exp env)
   (let ((fun (lookup (expression-type exp) eval-table)))
     (cond ((self-evaluating? exp) exp)
@@ -127,6 +127,6 @@
 	  ((quoted? exp) (text-of-quotation exp))
 	  (fun (fun exp env))
 	  ((application? exp)
-	   (apply (eval (operator exp env)
-			(list-of-values (operands exp) env))))
+	   (apply (eval (operator exp) env)
+			(list-of-values (operands exp) env)))
 	  (else "Unknown operation type EVAL: exp"))))
