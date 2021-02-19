@@ -2,6 +2,8 @@
 
 (load "eval.scm")
 
+(define the-global-environment (setup-environment))
+
 (define input-prompt  ";;; M-Eval input:")
 (define output-prompt ";;; M-Eval value")
 
