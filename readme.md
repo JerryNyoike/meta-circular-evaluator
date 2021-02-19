@@ -18,3 +18,9 @@ The if predicate is being evaluated in the language being implemented
 and thus yields a value in that language.
 The evaluator predicate true? then transforms that value into a value 
 that can be tested by the if in the implementation language
+
+## How to Run
+1. Install [MIT Scheme](https://www.gnu.org/software/mit-scheme/)
+2. Run the Scheme REPL.
+3. Compile the files by typing in the REPL `(cf "<file-name>")`
+4. Load the driver loop by typing in the REPL `(load "driver_loop")`
