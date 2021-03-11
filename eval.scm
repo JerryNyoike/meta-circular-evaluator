@@ -77,7 +77,10 @@
     'ok)
 
   (define (eval-let exp env)
-    (eval (let->combination exp) env))
+    (let ((as-combination (let->combination exp)))
+      (make-procedure (lambda-parameters as-combination)
+		      (lambda-body as-combination)
+		      env)))
 
   (insert! 'set! eval-assignment eval-table)
   (insert! 'define eval-definition eval-table)
