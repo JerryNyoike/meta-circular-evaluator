@@ -139,6 +139,10 @@
 (define (let-bindings exp) (cadr exp))
 (define (let-binding-names bindings)
   (map car bindings))
+(define (append-let-bindings bindings)
+  ; let bindings come as separate lists and we need them as
+  ; a single list of values thus the need for this procedure
+  (map car bindings))
 (define (let-binding-exps bindings)
   (map cdr bindings))
 (define (let-body exp) (cddr exp))
@@ -154,7 +158,7 @@
 	    (append
 	      (make-lambda (let-binding-names bindings) ;params
 			   (let-body exp))		;body
-	      (let-binding-exps bindings))))))
+	      (append-let-bindings (let-binding-exps bindings)))))))
 (define (make-let bindings body)
   (cons 'let (list bindings) body))
 (define (last-binding? binding)
