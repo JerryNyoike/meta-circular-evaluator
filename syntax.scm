@@ -41,7 +41,7 @@
     (cadr exp)
     (caadr exp)))
 (define (definition-value exp)
-  (if (symbol? exp)
+  (if (symbol? (cadr exp))
     (caddr exp)
     (make-lambda
       (cdadr exp)	;params
