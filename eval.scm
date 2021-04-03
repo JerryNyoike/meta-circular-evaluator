@@ -36,7 +36,7 @@
 	 (eval (first-exp exps) env))
 	(else
 	  (eval (first-exp exps) env)
-	  (eval (rest-exps exps) env))))
+	  (eval (rest-exp exps) env))))
 
 (define (install-eval-definitions)
   (define (eval-if exp env)
