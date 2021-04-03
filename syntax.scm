@@ -34,6 +34,8 @@
 (define (assignment? exp) (tagged-list? exp 'set!))
 (define (assignment-variable exp) (cadr exp))
 (define (assignment-value exp) (caddr exp))
+(define (make-assignment var-name var-value)
+  (list 'set! var-name var-value))
 
 (define (definition? exp) (tagged-list? exp 'define))
 (define (definition-variable exp)
@@ -160,7 +162,7 @@
 			   (let-body exp))		;body
 	      (append-let-bindings (let-binding-exps bindings)))))))
 (define (make-let bindings body)
-  (cons 'let (list bindings) body))
+  (list 'let (list bindings) body))
 (define (last-binding? binding)
   (null? (cdr binding)))
 
@@ -291,7 +293,7 @@
   (define (make-unassigned-bindings var-names)
     (if (null? var-names)
       '()
-      (cons (list (cons var-names '*unassigned*))
+      (cons (cons (car var-names) '*unassigned*)
 	    (make-unassigned-bindings (cdr var-names)))))
   (let* ((defines (filter definition? procedure-body))
 	 (rest-body (filter (lambda (x) (not (definition? x))) procedure-body))
@@ -300,6 +302,10 @@
 	 (unassigned-bindings (make-unassigned-bindings var-names)))
     (newline)
     (display var-names)
+    (newline)
+    (display rest-body)
+    (newline)
+    (display unassigned-bindings)
     (newline)
     (make-let unassigned-bindings
 	      (append (map make-assignment var-names var-values)
