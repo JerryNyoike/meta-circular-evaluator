@@ -302,8 +302,10 @@
 	 (var-names (map definition-variable defines))
 	 (var-values (map definition-value defines))
 	 (unassigned-bindings (make-unassigned-bindings var-names)))
-    (filter (lambda (x) (not (null? x)))
-	    (append (make-let unassigned-bindings
-	      '())
-	      (append (map make-assignment var-names var-values)
-		      rest-body)))))
+    (if (null? defines)
+      procedure-body
+      (filter (lambda (x) (not (null? x)))
+	      (append (make-let unassigned-bindings
+				'())
+		      (append (map make-assignment var-names var-values)
+			      rest-body))))))
