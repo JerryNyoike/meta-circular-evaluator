@@ -302,13 +302,6 @@
 	 (var-names (map definition-variable defines))
 	 (var-values (map definition-value defines))
 	 (unassigned-bindings (make-unassigned-bindings var-names)))
-    (newline)
-    (display defines)
-    (newline)
-    (display rest-body)
-    (newline)
-    (display unassigned-bindings)
-    (newline)
     (filter (lambda (x) (not (null? x)))
 	    (append (make-let unassigned-bindings
 	      '())
