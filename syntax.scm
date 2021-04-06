@@ -53,7 +53,7 @@
 (define (lambda-parameters exp) (cadr exp))
 (define (lambda-body exp) (cddr exp))
 (define (make-lambda parameters body)
-  (list (cons 'lambda (cons parameters body))))
+  (cons 'lambda (cons parameters body)))
 
 (define (if? exp) (tagged-list? exp 'if))
 (define (if-predicate exp) (cadr exp))
@@ -199,7 +199,7 @@
 (define (compound-procedure? p)
   (tagged-list? p 'procedure))
 (define (procedure-parameters p) (cadr p))
-(define (procedure-body p) (caddr p))
+(define (procedure-body p) (scan-out-defines (caddr p)))
 (define (procedure-environment p) (cadddr p))
 
 ;; environments
